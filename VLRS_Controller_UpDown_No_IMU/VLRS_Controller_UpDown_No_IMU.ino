@@ -38,6 +38,13 @@ const double MOTOR_FRAME[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 /* pid gains */
 const double MOTOR_Kp[] = {0.2, 0.2, 0.2, 0.2, 1.0, 1.0};
 
+/* Joint offset */
+const double JOINT_OFFSET[] = {0.0, 0.0,    39.0,  39.0, 0.0, 0.0};
+
+/* Joint dir */
+const double JOINT_DIR[] = {1.0, 1.0,      -1.0,  -1.0,  -1.0, 1.0};
+
+
 /* Analog pin for encoders */
 const int ENCODER_PIN[] = {A0, A0, A1, A1, A2, A3};
 
@@ -420,26 +427,55 @@ int doCheck(int mot)
   /*read analog here */
   double cal_knob = getMotorPos(mL1) + 90.0;
 
-  double the_max = THETA_SAT_MAX[mot];
-  double the_min = THETA_SAT_MIN[mot];
+  //cal_knob = 20;
+
+  double the_max = 45;
+  double the_min = 0.0;
   if (cal_knob > the_max) cal_knob = the_max;
   if (cal_knob < the_min) cal_knob = the_min;
 
+/*
   Serial.println();
   Serial.print("Set = ");
   Serial.print(cal_knob);
   Serial.print("  Enc = ");
   Serial.print(getMotorPos(mot));
   Serial.println();
-
-  THETA_MOTOR[mot] = cal_knob;
+*/
+ // THETA_MOTOR[mot] = cal_knob;
+  setPos(mot, cal_knob);
   //for (int i = 0; i < NUM_JOINTS; i++) FLAG_MOTOR[i] = false;
-  FLAG_MOTOR[mot] = true;
+  
+  
+  //FLAG_MOTOR[mot] = true;
+  enableMotor(mot);
   return true;
 
   return 0;
 }
 
+int enableMotor(int mot)
+{
+  FLAG_MOTOR[mot] = true;
+  return 0;
+}
+
+int setPos(int mot, double pos)
+{
+  /* Sets your motor position */
+  double to_motor = pos*JOINT_DIR[mot] + JOINT_OFFSET[mot];
+  Serial.println();
+    Serial.print("  joint = ");
+  Serial.print(mot);
+  Serial.print(" Set = ");
+  Serial.print(pos);
+  Serial.print(" To Motor = ");
+  Serial.print(to_motor);
+  THETA_MOTOR[mot] = to_motor;
+
+  Serial.println();
+  return 0;
+}
 
 void loop() {
   // put your main code here, to run repeatedly:
