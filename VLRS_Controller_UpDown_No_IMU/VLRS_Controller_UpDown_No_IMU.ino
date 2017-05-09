@@ -495,8 +495,8 @@ void loop() {
     doCheck(mL01);
 
     /* Right Test */
-    //doCheck(mR00);
-    //doCheck(mR01);
+    doCheck(mR00);
+    doCheck(mR01);
     
     /* disabling all motors for debuggins */
     //disableAllMotors();
