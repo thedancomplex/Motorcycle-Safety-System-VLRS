@@ -126,7 +126,7 @@ void setup() {
   Serial.begin(115200);
 
   /* Set input for mode button */
-  pinMode(MODE_BUTTON_PIN, INPUT);
+  pinMode(MODE_BUTTON_PIN, INPUT_PULLUP);
 
   /* Set mode for Analog */
   for (int i = 0; i < NUM_JOINTS; i++) pinMode(ENCODER_PIN[i], INPUT);
@@ -186,8 +186,9 @@ int getIMU()
 
 int getMode()
 {
-  /* gets the mode from the mode button */
-  return (int)digitalRead(MODE_BUTTON_PIN);
+  int theMode = (int)digitalRead(MODE_BUTTON_PIN);
+  if(0 == theMode) return MODE_PARK;
+  else return MODE_DRIVE;
 }
 
 int setPark()
@@ -514,6 +515,14 @@ int setPos(int mot, double pos)
   return 0;
 }
 
+
+int getModeButton(int mode)
+{
+  if(MODE_PARK  == mode) setMode(MODE_PARK);
+  if(MODE_DRIVE == mode) setMode(MODE_DRIVE);
+  return 0;
+}
+
 void loop() {
   // put your main code here, to run repeatedly:
 
@@ -528,8 +537,10 @@ void loop() {
     disableAllMotors();
 
     /* sets mode - changes safty lims */
-    setMode(MODE_PARK);
-
+    //setMode(MODE_PARK);
+    //setMode(MODE_DRIVE);
+    getModeButton(getMode());
+    
     /* Left Test */
     doCheck(mL00);
     doCheck(mL01);
