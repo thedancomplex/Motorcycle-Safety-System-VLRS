@@ -4,6 +4,8 @@ UM7 imu;
 
 #define MOTOR_ROT 0
 #define MOTOR_LIN 1
+#define MODE_DRIVE 2
+#define MODE_PARK 3
 
 #define mL00 0 // left motor front   (mot #1)
 #define mL01 1 // left motor back    (mot #2)
@@ -77,8 +79,18 @@ const double MOTOR_OFFSET[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 double PWM_MOTOR[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
-const double THETA_SAT_MAX[] = { 46.0,  46.0,   46.0,  46.0,  180.0,  180.0};
-const double THETA_SAT_MIN[] = {  7.0,  7.0,     0.1,   0.1, -180.0, -180.0};
+/* Mode Limits */ 
+const double MODE_PARK_THETA_SAT_MAX[] = {    46.0,   46.0,    62.0,  62.0,  180.0,  180.0};
+const double MODE_PARK_THETA_SAT_MIN[] = {   -12.0,  -12.0,     0.1,   0.1, -180.0, -180.0};
+
+/* Mode Drive */
+const double MODE_DRIVE_THETA_SAT_MAX[] = { 46.0,  46.0,   46.0,  46.0,  180.0,  180.0};
+const double MODE_DRIVE_THETA_SAT_MIN[] = {  7.0,  7.0,     0.1,   0.1, -180.0, -180.0};
+
+
+
+double THETA_SAT_MAX[] = { 46.0,  46.0,   46.0,  46.0,  180.0,  180.0};
+double THETA_SAT_MIN[] = {  7.0,  7.0,     0.1,   0.1, -180.0, -180.0};
 
 /* PWM sat */
 #define PWM_MAX 0.39
@@ -430,7 +442,7 @@ int doCheck(int mot)
   //cal_knob = 20;
 
   double the_max = 45;
-  double the_min = 0.0;
+  double the_min = -30;
   if (cal_knob > the_max) cal_knob = the_max;
   if (cal_knob < the_min) cal_knob = the_min;
 
@@ -459,6 +471,31 @@ int enableMotor(int mot)
   FLAG_MOTOR[mot] = true;
   return 0;
 }
+
+
+int setMode(int mode)
+{
+    for (int i = 0; i < NUM_JOINTS; i++)
+    { 
+      if(MODE_DRIVE == mode)
+      {
+        THETA_SAT_MAX[i] = MODE_DRIVE_THETA_SAT_MAX[i];
+        THETA_SAT_MIN[i] = MODE_DRIVE_THETA_SAT_MIN[i];
+      }
+      else if(MODE_PARK == mode)
+      {
+        THETA_SAT_MAX[i] = MODE_PARK_THETA_SAT_MAX[i];
+        THETA_SAT_MIN[i] = MODE_PARK_THETA_SAT_MIN[i];
+      }
+      else return 1;
+    }
+
+    return 0;
+}
+
+    
+
+
 
 int setPos(int mot, double pos)
 {
@@ -489,6 +526,9 @@ void loop() {
     //if(1 == getMode()) doPark();
     //else doTrack();
     disableAllMotors();
+
+    /* sets mode - changes safty lims */
+    setMode(MODE_PARK);
 
     /* Left Test */
     doCheck(mL00);
