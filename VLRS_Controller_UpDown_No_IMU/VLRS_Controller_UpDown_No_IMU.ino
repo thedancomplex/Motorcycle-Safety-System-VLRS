@@ -36,7 +36,7 @@ const double MOTOR_DIR[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 const double MOTOR_FRAME[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
 /* pid gains */
-const double MOTOR_Kp[] = {1.0, 0.2, 1.0, 0.2, 1.0, 1.0};
+const double MOTOR_Kp[] = {0.2, 0.2, 1.0, 0.2, 1.0, 1.0};
 
 /* Analog pin for encoders */
 const int ENCODER_PIN[] = {A0, A0, A1, A1, A2, A3};
@@ -70,8 +70,8 @@ const double MOTOR_OFFSET[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 double PWM_MOTOR[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
-const double THETA_SAT_MAX[] = { 180.0,  46.0,   180.0,  46.0,  180.0,  180.0};
-const double THETA_SAT_MIN[] = { -180.0,  7.0, -180.0, 0.1, -180.0, -180.0};
+const double THETA_SAT_MAX[] = { 46.0,  46.0,   180.0,  46.0,  180.0,  180.0};
+const double THETA_SAT_MIN[] = {  7.0,  7.0, -180.0, 0.1, -180.0, -180.0};
 
 /* PWM sat */
 #define PWM_MAX 0.39
@@ -415,8 +415,6 @@ int disableAllMotors()
 
 
 
-
-
 int doCheck(int mot)
 {
   /*read analog here */
@@ -435,7 +433,7 @@ int doCheck(int mot)
   Serial.println();
 
   THETA_MOTOR[mot] = cal_knob;
-  for (int i = 0; i < NUM_JOINTS; i++) FLAG_MOTOR[i] = false;
+  //for (int i = 0; i < NUM_JOINTS; i++) FLAG_MOTOR[i] = false;
   FLAG_MOTOR[mot] = true;
   return true;
 
@@ -454,7 +452,8 @@ void loop() {
     /* do parking or tracking based on mode */
     //if(1 == getMode()) doPark();
     //else doTrack();
-
+    disableAllMotors();
+    doCheck(mL00);
     doCheck(mL01);
 
     /* disabling all motors for debuggins */
