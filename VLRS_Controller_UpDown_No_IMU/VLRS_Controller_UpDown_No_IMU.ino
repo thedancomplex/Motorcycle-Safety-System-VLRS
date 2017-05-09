@@ -39,10 +39,10 @@ const double MOTOR_FRAME[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 const double MOTOR_Kp[] = {0.2, 0.2, 0.2, 0.2, 1.0, 1.0};
 
 /* Joint offset */
-const double JOINT_OFFSET[] = {0.0, 0.0,    39.0,  39.0, 0.0, 0.0};
+const double JOINT_OFFSET[] = {10.9, 10.9,    39.0,  39.0, 0.0, 0.0};
 
 /* Joint dir */
-const double JOINT_DIR[] = {1.0, 1.0,      -1.0,  -1.0,  -1.0, 1.0};
+const double JOINT_DIR[]    = {1.0,   1.0,      -1.0,  -1.0,  -1.0, 1.0};
 
 
 /* Analog pin for encoders */
@@ -491,12 +491,12 @@ void loop() {
     disableAllMotors();
 
     /* Left Test */
-    //doCheck(mL00);
-    //doCheck(mL01);
+    doCheck(mL00);
+    doCheck(mL01);
 
     /* Right Test */
-    doCheck(mR00);
-    doCheck(mR01);
+    //doCheck(mR00);
+    //doCheck(mR01);
     
     /* disabling all motors for debuggins */
     //disableAllMotors();
