@@ -36,7 +36,7 @@ const double MOTOR_DIR[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 const double MOTOR_FRAME[] = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
 
 /* pid gains */
-const double MOTOR_Kp[] = {0.2, 0.2, 1.0, 0.2, 1.0, 1.0};
+const double MOTOR_Kp[] = {0.2, 0.2, 0.2, 0.2, 1.0, 1.0};
 
 /* Analog pin for encoders */
 const int ENCODER_PIN[] = {A0, A0, A1, A1, A2, A3};
@@ -70,8 +70,8 @@ const double MOTOR_OFFSET[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 double PWM_MOTOR[] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
 
-const double THETA_SAT_MAX[] = { 46.0,  46.0,   180.0,  46.0,  180.0,  180.0};
-const double THETA_SAT_MIN[] = {  7.0,  7.0, -180.0, 0.1, -180.0, -180.0};
+const double THETA_SAT_MAX[] = { 46.0,  46.0,   46.0,  46.0,  180.0,  180.0};
+const double THETA_SAT_MIN[] = {  7.0,  7.0,     0.1,   0.1, -180.0, -180.0};
 
 /* PWM sat */
 #define PWM_MAX 0.39
@@ -453,9 +453,15 @@ void loop() {
     //if(1 == getMode()) doPark();
     //else doTrack();
     disableAllMotors();
-    doCheck(mL00);
-    doCheck(mL01);
 
+    /* Left Test */
+    //doCheck(mL00);
+    //doCheck(mL01);
+
+    /* Right Test */
+    doCheck(mR00);
+    doCheck(mR01);
+    
     /* disabling all motors for debuggins */
     //disableAllMotors();
 
